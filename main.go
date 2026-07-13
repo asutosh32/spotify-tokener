@@ -84,11 +84,6 @@ func main() {
         <-sig
 }
 
-type server struct {
-        ctx    context.Context
-        server *http.Server
-}
-
 func (s *server) Start() {
         if err := s.server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
                 slog.Error("Failed to start server", slog.Any("err", err))
