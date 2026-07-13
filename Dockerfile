@@ -25,6 +25,7 @@ USER root
 RUN chmod +x /headless-shell
 
 EXPOSE 8080
+# Railway injects $PORT at runtime; the app reads it automatically.
 
 COPY --from=build /build/spotify-tokener /bin/spotify-tokener
 
