@@ -66,6 +66,13 @@ func main() {
         }
 
         mux.HandleFunc("/api/token", s.handleToken)
+        mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+                if r.URL.Path != "/" {
+                        http.NotFound(w, r)
+                        return
+                }
+                http.Redirect(w, r, "/api/token", http.StatusTemporaryRedirect)
+        })
 
         go s.Start()
         defer s.Stop()
