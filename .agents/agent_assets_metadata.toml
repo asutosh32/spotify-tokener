@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "qiywGgVnHTmc40sVazqCm"
+uri = "file://spotify-tokener-src.zip"
+type = "unspecified"
+title = "spotify-tokener source code"
