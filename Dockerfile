@@ -20,6 +20,8 @@ RUN --mount=type=cache,target=/root/.cache/go-build \
 
 FROM chromedp/headless-shell
 
+EXPOSE 8080
+
 COPY --from=build /build/spotify-tokener /bin/spotify-tokener
 
 ENTRYPOINT ["/bin/spotify-tokener"]
