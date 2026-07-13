@@ -16,14 +16,17 @@ RUN CGO_ENABLED=0 \
     GOARCH=$TARGETARCH \
     go build -o spotify-tokener github.com/topi314/spotify-tokener
 
-FROM chromedp/headless-shell
+FROM debian:bookworm-slim
 
-USER root
+RUN apt-get update && apt-get install -y \
+    chromium \
+    --no-install-recommends \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN chmod +x /headless-shell
+ENV SPOTIFY_TOKENER_CHROME_PATH=/usr/bin/chromium
+# Railway injects $PORT at runtime; the app reads it automatically.
 
 EXPOSE 8080
-# Railway injects $PORT at runtime; the app reads it automatically.
 
 COPY --from=build /build/spotify-tokener /bin/spotify-tokener
 
