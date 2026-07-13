@@ -1,4 +1,4 @@
-modules = ["go-1.21", "go-1.25"]
+modules = ["go-1.21", "nix"]
 [agent]
 expertMode = true
 stack = "BEST_EFFORT_FALLBACK"
