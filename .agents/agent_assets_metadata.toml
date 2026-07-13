@@ -12,3 +12,9 @@ id = "hEaPPJ4MpEEVywNW8tLCP"
 uri = "file://spotify-tokener-binary.zip"
 type = "unspecified"
 title = "spotify-tokener Linux binary (executable)"
+
+[[outputs]]
+id = "6_rGe3WAUP73pfrItfseS"
+uri = "file://snapdeploy-upload.zip"
+type = "unspecified"
+title = "SnapDeploy upload (startup script + binary)"
