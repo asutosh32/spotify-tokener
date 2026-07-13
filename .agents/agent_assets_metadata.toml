@@ -6,3 +6,9 @@ id = "qiywGgVnHTmc40sVazqCm"
 uri = "file://spotify-tokener-src.zip"
 type = "unspecified"
 title = "spotify-tokener source code"
+
+[[outputs]]
+id = "hEaPPJ4MpEEVywNW8tLCP"
+uri = "file://spotify-tokener-binary.zip"
+type = "unspecified"
+title = "spotify-tokener Linux binary (executable)"
