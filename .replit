@@ -27,7 +27,7 @@ outputType = "webview"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "GOTOOLCHAIN=local SPOTIFY_TOKENER_ADDR=0.0.0.0:5000 SPOTIFY_TOKENER_CHROME_PATH=/nix/store/qa9cnw4v5xkxyip6mb9kxqfq1z4x2dx1-chromium-138.0.7204.100/bin/chromium go run -mod=mod ."
+args = "SPOTIFY_TOKENER_ADDR=0.0.0.0:5000 SPOTIFY_TOKENER_CHROME_PATH=/nix/store/qa9cnw4v5xkxyip6mb9kxqfq1z4x2dx1-chromium-138.0.7204.100/bin/chromium /nix/store/60z37432vmgkg54krwr1z057bqwp7583-go-1.25.5/bin/go run -mod=mod ."
 waitForPort = 5000
 
 [[ports]]

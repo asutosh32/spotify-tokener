@@ -20,19 +20,16 @@ type tokenCache struct {
 	expiresAt time.Time
 }
 
-type server struct {
-	ctx    context.Context
-	server *http.Server
-
+var (
 	cacheMu sync.Mutex
-	cache   map[string]*tokenCache
-}
+	cache   = make(map[string]*tokenCache)
+)
 
 func (s *server) handleToken(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
+	cacheKey := ""
 	var cookies []*network.CookieParam
-	var cacheKey string
 	for _, cookie := range r.Cookies() {
 		cookies = append(cookies, &network.CookieParam{
 			Name:  cookie.Name,
@@ -42,12 +39,9 @@ func (s *server) handleToken(w http.ResponseWriter, r *http.Request) {
 		cacheKey += cookie.Name + "=" + cookie.Value + ";"
 	}
 
-	s.cacheMu.Lock()
-	if s.cache == nil {
-		s.cache = make(map[string]*tokenCache)
-	}
-	cached, ok := s.cache[cacheKey]
-	s.cacheMu.Unlock()
+	cacheMu.Lock()
+	cached, ok := cache[cacheKey]
+	cacheMu.Unlock()
 
 	if ok && time.Now().Before(cached.expiresAt) {
 		slog.InfoContext(ctx, "Returning cached token", slog.Time("expiresAt", cached.expiresAt))
@@ -72,9 +66,9 @@ func (s *server) handleToken(w http.ResponseWriter, r *http.Request) {
 	}
 	if err := json.Unmarshal(body, &parsed); err == nil && parsed.ExpirationMs > 0 {
 		expiresAt := time.UnixMilli(parsed.ExpirationMs).Add(-5 * time.Minute)
-		s.cacheMu.Lock()
-		s.cache[cacheKey] = &tokenCache{body: body, expiresAt: expiresAt}
-		s.cacheMu.Unlock()
+		cacheMu.Lock()
+		cache[cacheKey] = &tokenCache{body: body, expiresAt: expiresAt}
+		cacheMu.Unlock()
 		slog.InfoContext(ctx, "Token cached", slog.Time("expiresAt", expiresAt))
 	}
 
@@ -117,11 +111,9 @@ func (s *server) getAccessTokenPayload(rCtx context.Context, cookies []*network.
 			if len(cookies) == 0 {
 				return nil
 			}
-
 			if err := network.SetCookies(cookies).Do(ctx); err != nil {
 				return fmt.Errorf("failed to set cookies: %w", err)
 			}
-
 			return nil
 		}),
 		chromedp.Navigate(spotifyURL),
